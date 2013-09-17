@@ -13,6 +13,7 @@ import javax.servlet.jsp.JspWriter;
 
 import nit.history.EntityDAO;
 import nit.history.HistoryDAO;
+import nit.history.HistoryService;
 import nit.history.LocationDAO;
 import nit.history.data.Entity;
 import nit.history.data.HistoryDataType;
@@ -25,13 +26,13 @@ import nit.history.data.impl.TimeImpl;
 public class SearchHelper {
 
 	public List<HistoryEvent> doHistorySearch(HttpServletRequest request, JspWriter out) throws IOException {
-		HistoryDAO historyDao = WebResources.getDAOFactory().getHistoryDAO();
-		
+		HistoryService service = WebResources.getHistoryService();
+				
 		List<String> messages = new LinkedList<String>();
 
 		HistoryDataType[] searchParams = getSearchParams(request, messages);
 		
-		List<HistoryEvent> results = historyDao.getHistoryEvents(searchParams);
+		List<HistoryEvent> results = service.getHistoryEvents(searchParams);
 		
 		// sort by start time descending
 		Collections.sort(results, new Comparator<HistoryEvent>() {
@@ -55,13 +56,13 @@ public class SearchHelper {
 	}
 	
 	public List<LocationRelationShip> doSearch(HttpServletRequest request, JspWriter out) throws IOException {
-		LocationDAO locationDao = WebResources.getDAOFactory().getLocationDAO();
+		HistoryService service = WebResources.getHistoryService();
 		
 		List<String> messages = new LinkedList<String>();
 
 		HistoryDataType[] searchParams = getSearchParams(request, messages);
 		
-		List<LocationRelationShip> results = locationDao.getRelationShips(searchParams);
+		List<LocationRelationShip> results = service.getRelationShips(searchParams);
 	
 		// sort by start time
 		Collections.sort(results, new Comparator<LocationRelationShip>() {
@@ -86,10 +87,8 @@ public class SearchHelper {
 	
 	
 	private HistoryDataType[] getSearchParams(HttpServletRequest request, List<String> messages) {
-		LocationDAO locationDao = WebResources.getDAOFactory().getLocationDAO();
-		EntityDAO entityDao = WebResources.getDAOFactory().getEntityDAO();
-		HistoryDAO historyDao = WebResources.getDAOFactory().getHistoryDAO();
-
+		HistoryService service = WebResources.getHistoryService();
+		
 		String locationParam = request.getParameter("search-location");
 		String fromParam = request.getParameter("search-from");
 		String toParam = request.getParameter("search-to");
@@ -97,15 +96,15 @@ public class SearchHelper {
 		
 		List<HistoryDataType> searchParams = new LinkedList<HistoryDataType>();
 		if (!WebHelper.isEmpty(locationParam)) {
-			if (WebHelper.doWarning(!locationDao.locationExists(locationParam), "The location '" + locationParam + "' does not exist.", messages)) {
-				searchParams.add(locationDao.getLocation(locationParam));
+			if (WebHelper.doWarning(!service.exists(locationParam, Location.class), "The location '" + locationParam + "' does not exist.", messages)) {
+				searchParams.add(service.fetch(locationParam, Location.class));
 			}
 		}
 		if (!WebHelper.isEmpty(entities)) {
 			String[] listOfEntities = entities.split(",");
 			for (String entity : listOfEntities) {
-				if (WebHelper.doWarning(!entityDao.exists(entity), "The Person '" + entity + "' does not exist", messages)) {
-					searchParams.add(entityDao.getEntity(entity));
+				if (WebHelper.doWarning(!service.exists(entity, Entity.class), "The Person '" + entity + "' does not exist", messages)) {
+					searchParams.add(service.fetch(entity, Entity.class));
 				}
 			}
 		}
@@ -138,7 +137,8 @@ public class SearchHelper {
 	}
 	
 	public Collection<Entity> getEntities(Location location, TimeSpan timeSpan) {
-		LocationDAO locationDao = WebResources.getDAOFactory().getLocationDAO();
-		return locationDao.getEntitiesForLocationForTimeSpan(location, timeSpan);
+		HistoryService service = WebResources.getHistoryService();
+		
+		return service.getEntitiesForLocationForTimeSpan(location, timeSpan);
 	}
 }

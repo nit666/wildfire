@@ -10,5 +10,5 @@ public interface DAOFactory {
 	EntityDAO getEntityDAO();
 	HistoryDAO getHistoryDAO();
 	LocationDAO getLocationDAO();
-	
+	LocationRelationShipDAO getRelationShipDAO();
 }

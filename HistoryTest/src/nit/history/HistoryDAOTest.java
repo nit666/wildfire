@@ -36,10 +36,10 @@ public class HistoryDAOTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        dao.createOrUpdateHistoryEvent(createEvent("E1", "home", 5, 10));
-        dao.createOrUpdateHistoryEvent(createEvent("E2", "home", 11, 15));
-        dao.createOrUpdateHistoryEvent(createEvent("E3", "markets", 16, 20));
-        dao.createOrUpdateHistoryEvent(createEvent("E4", "hills", 21, 25));
+        dao.createOrUpdate(createEvent("E1", "home", 5, 10));
+        dao.createOrUpdate(createEvent("E2", "home", 11, 15));
+        dao.createOrUpdate(createEvent("E3", "markets", 16, 20));
+        dao.createOrUpdate(createEvent("E4", "hills", 21, 25));
     }
 
 

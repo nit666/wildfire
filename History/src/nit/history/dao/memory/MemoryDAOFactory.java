@@ -4,12 +4,14 @@ import nit.history.DAOFactory;
 import nit.history.EntityDAO;
 import nit.history.HistoryDAO;
 import nit.history.LocationDAO;
+import nit.history.LocationRelationShipDAO;
 
 public class MemoryDAOFactory implements DAOFactory {
 
-	EntityDAO entityDAO = new MemoryEntityDAOImpl(this);
+	EntityDAO entityDAO = new MemoryEntityDAOImpl();
 	HistoryDAO historyDAO = new MemoryHistoryDAOImpl(this);
 	LocationDAO locationDAO = new MemoryLocationDAOImpl(this);
+	LocationRelationShipDAO relationShipDAO = new MemoryLocationRelationShipDAOImpl();
 	
 	@Override
 	public EntityDAO getEntityDAO() {
@@ -26,6 +28,8 @@ public class MemoryDAOFactory implements DAOFactory {
 		return locationDAO;
 	}
 
-	
-	
+	@Override
+	public LocationRelationShipDAO getRelationShipDAO() {
+		return relationShipDAO;
+	}
 }

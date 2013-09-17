@@ -25,14 +25,14 @@ public class MemoryHistoryDAOImpl extends MemoryStorage<HistoryEvent> implements
 	}
 	
 	@Override
-	public void createOrUpdateHistoryEvent(HistoryEvent event) {
-		factory.getLocationDAO().createOrUpdateLocation(event.getLocation());
-		save(event);
+	public void createOrUpdate(HistoryEvent event) {
+		factory.getLocationDAO().createOrUpdate(event.getLocation());
+		super.createOrUpdate(event);
 	}
 	
 	@Override
 	public List<HistoryEvent> getHistoryEvents(HistoryDataType ... types) {
-		Set<HistoryEvent> retVal = new HashSet<HistoryEvent>(data.values());
+		Set<HistoryEvent> retVal = new HashSet<HistoryEvent>(getValues());
 		
 		for (HistoryDataType type : types) {
 			if (type instanceof Location) {
@@ -55,8 +55,8 @@ public class MemoryHistoryDAOImpl extends MemoryStorage<HistoryEvent> implements
 	private Collection<HistoryEvent> getHistoryEventsByEntity(Entity entity) {
 		Collection<HistoryEvent> retVal = new LinkedList<HistoryEvent>();
 		
-		for (HistoryEvent event : data.values()) {
-			if (factory.getLocationDAO().entityWasAtLocationAtTime(event.getLocation(), entity, event.getTimeSpan())) {
+		for (HistoryEvent event : getValues()) {
+			if (factory.getRelationShipDAO().entityWasAtLocationAtTime(event.getLocation(), entity, event.getTimeSpan())) {
 				retVal.add(event);	
 			}
 		}
@@ -67,7 +67,7 @@ public class MemoryHistoryDAOImpl extends MemoryStorage<HistoryEvent> implements
 	private Collection<HistoryEvent> getHistoryEventsByLocation(Location location) {
 		Collection<HistoryEvent> retVal = new LinkedList<HistoryEvent>();
 		
-		for (HistoryEvent event : data.values()) {
+		for (HistoryEvent event : getValues()) {
 			if (event.getLocation().equals(location)) {
 				retVal.add(event);
 			}
@@ -79,7 +79,7 @@ public class MemoryHistoryDAOImpl extends MemoryStorage<HistoryEvent> implements
 	private Collection<HistoryEvent> getHistoryEventsByTime(Time time) {
 		Collection<HistoryEvent> retVal = new LinkedList<HistoryEvent>();
 		
-		for (HistoryEvent event : data.values()) {
+		for (HistoryEvent event : getValues()) {
 			if (event.getTimeSpan().isWithinTimeSpan(time)) {
 				retVal.add(event);
 			}
@@ -91,7 +91,7 @@ public class MemoryHistoryDAOImpl extends MemoryStorage<HistoryEvent> implements
 	private Collection<HistoryEvent> getHistoryEventsByTimeSpan(TimeSpan timeSpan) {
 		Collection<HistoryEvent> retVal = new LinkedList<HistoryEvent>();
 		
-		for (HistoryEvent event : data.values()) {
+		for (HistoryEvent event : getValues()) {
 			if (event.getTimeSpan().isWithinTimeSpan(timeSpan)) {
 				retVal.add(event);
 			}

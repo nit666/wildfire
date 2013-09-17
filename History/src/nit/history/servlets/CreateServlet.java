@@ -12,14 +12,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import nit.history.DAOFactory;
-import nit.history.EntityDAO;
-import nit.history.HistoryDAO;
-import nit.history.LocationDAO;
+import nit.history.HistoryService;
 import nit.history.data.Entity;
+import nit.history.data.HistoryEvent;
 import nit.history.data.Location;
 import nit.history.data.LocationRelationShip;
-import nit.history.data.Time;
 import nit.history.data.TimeSpan;
 import nit.history.data.impl.EntityImpl;
 import nit.history.data.impl.HistoryEventImpl;
@@ -71,12 +68,12 @@ public class CreateServlet extends HttpServlet {
 	// create an entity
 	private void doEntity(HttpServletRequest request, List<String> messages) throws Exception {
 		String name = request.getParameter("entity-name");
-		EntityDAO entityDAO = WebResources.getDAOFactory().getEntityDAO();
+		HistoryService service = WebResources.getHistoryService();
 		
 		WebHelper.doError(!WebHelper.verifyStringParam(name), "No value was entered for Name", messages);
-		WebHelper.doError(entityDAO.exists(name), "Entity " + name + " already exists", messages);
+		WebHelper.doError(service.exists(name, Entity.class), "Entity " + name + " already exists", messages);
 			
-		entityDAO.createOrUpdateEntity(new EntityImpl(name));
+		service.saveOrUpdate(new EntityImpl(name), Entity.class);
 		messages.add("New Entity " + name + " Created");
 	}
 	
@@ -89,16 +86,16 @@ public class CreateServlet extends HttpServlet {
 			WebHelper.doError(!WebHelper.verifyStringParam(locationParent), "Location Parent is not valid", messages);
 		}
 		
-		LocationDAO dao = WebResources.getDAOFactory().getLocationDAO();
-		WebHelper.doError(dao.locationExists(locationName), "Location already exists", messages);
+		HistoryService service = WebResources.getHistoryService();
+		WebHelper.doError(service.exists(locationName, Location.class), "Location already exists", messages);
 		Location parent = null;
 		if (!WebHelper.isEmpty(locationParent)) { // location can be null
-			WebHelper.doError(!dao.locationExists(locationParent), "Parent location doesn't exist, add this first", messages);
-			parent = dao.getLocation(locationParent);
+			WebHelper.doError(!service.exists(locationParent, Location.class), "Parent location doesn't exist, add this first", messages);
+			parent = service.fetch(locationParent, Location.class);
 		}
 		
 		LocationImpl location = new LocationImpl(locationName, parent);
-		dao.createOrUpdateLocation(location);
+		service.saveOrUpdate(location, Location.class);
 		
 		messages.add("New Location " + locationName + " Created");
 	}
@@ -109,13 +106,13 @@ public class CreateServlet extends HttpServlet {
 		String relationshipStart  = request.getParameter("relationship-start");
 		String relationshipEnd = request.getParameter("relationship-end");
 		
-		DAOFactory factory = WebResources.getDAOFactory();
+		HistoryService service = WebResources.getHistoryService();
 		
 		// error checking for entity
 		WebHelper.doError(!WebHelper.verifyStringParam(entityName), "The entity was not entered correctly", messages);
 		Entity entity = null;
 		try {
-			entity = factory.getEntityDAO().getEntity(entityName);
+			entity = service.fetch(entityName, Entity.class);
 		} catch (NoSuchElementException e) {
 			WebHelper.doError(true, "The entity does not exist", messages);
 		}
@@ -124,7 +121,7 @@ public class CreateServlet extends HttpServlet {
 		WebHelper.doError(!WebHelper.verifyStringParam(locationName), "The location was not entered correctly", messages);
 		Location location = null;
 		try {
-			location = factory.getLocationDAO().getLocation(locationName);
+			location = service.fetch(locationName, Location.class);
 		} catch (NoSuchElementException e) {
 			WebHelper.doError(true, "The location does not exist", messages);
 		}
@@ -139,7 +136,7 @@ public class CreateServlet extends HttpServlet {
 		LocationRelationShip relship = new LocationRelationShip(
 				new TimeSpan(new TimeImpl(startDate.getTime()), new TimeImpl(endDate.getTime())),
 				entity, location);
-		factory.getLocationDAO().createOrUpdateLocationRelationShip(relship);
+		service.saveOrUpdate(relship, LocationRelationShip.class);
 		messages.add("New Location/Entity relationship created");
 	}
 	
@@ -150,14 +147,13 @@ public class CreateServlet extends HttpServlet {
 		String eventStart = request.getParameter("event-start");
 		String eventEnd = request.getParameter("event-end");
 		
-		HistoryDAO history = WebResources.getDAOFactory().getHistoryDAO();
-		LocationDAO location = WebResources.getDAOFactory().getLocationDAO();
+		HistoryService service = WebResources.getHistoryService();
 		
 		WebHelper.doError(!WebHelper.verifyStringParam(eventName), "The name of the event must have a value", messages);
 		WebHelper.doError(!WebHelper.verifyStringParam(eventDescription), "The description must have a value", messages);
 		WebHelper.doError(!WebHelper.verifyStringParam(eventLocation), "The event must have a location", messages);
-		WebHelper.doError(!location.locationExists(eventLocation), "The location doesn't exist, please create it first", messages);
-		Location loc = location.getLocation(eventLocation);
+		WebHelper.doError(!service.exists(eventLocation, Location.class), "The location doesn't exist, please create it first", messages);
+		Location loc = service.fetch(eventLocation, Location.class);
 		
 		// error checking for dates
 		Date startDate = WebHelper.stringToDatePamameter(eventStart);
@@ -167,7 +163,7 @@ public class CreateServlet extends HttpServlet {
 		
 		HistoryEventImpl event = new HistoryEventImpl(eventName, loc, new TimeSpan(new TimeImpl(startDate), new TimeImpl(endDate)));
 		event.setDescription(eventDescription);
-		history.createOrUpdateHistoryEvent(event);
+		service.saveOrUpdate(event, HistoryEvent.class);
 		
 		messages.add("New Event created");
 	}

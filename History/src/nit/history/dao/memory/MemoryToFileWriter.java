@@ -35,7 +35,7 @@ public class MemoryToFileWriter {
 		
 		MemoryEntityDAOImpl entityDAO = (MemoryEntityDAOImpl) factory.getEntityDAO();
 		// write entities
-		for (Entity ent : entityDAO.data.values()) {
+		for (Entity ent : entityDAO.getValues()) {
 			writer.println("@Entity" + DELIMITER + 
 					ent.getID() + DELIMITER + 
 					ent.getName());
@@ -44,12 +44,12 @@ public class MemoryToFileWriter {
 		// write locations
 		MemoryLocationDAOImpl locations = (MemoryLocationDAOImpl) factory.getLocationDAO();
 		Set<String> alreadyWritten = new HashSet<String>();
-		for (Location loc : locations.data.values()) {
+		for (Location loc : locations.getValues()) {
 			writeLocation(locations, alreadyWritten, loc, writer);
 		}
 		
 		// write location entity relationships
-		for (LocationRelationShip locRel : locations.relationships.data.values()) {
+		for (LocationRelationShip locRel : locations.relationships.getValues()) {
 			writer.println("@LocationRelationship" + DELIMITER + 
 					locRel.getID() + DELIMITER +
 					locRel.getEntity().getID() + DELIMITER +
@@ -60,7 +60,7 @@ public class MemoryToFileWriter {
 		
 		// write history events
 		MemoryHistoryDAOImpl history = (MemoryHistoryDAOImpl) factory.getHistoryDAO();
-		for (HistoryEvent event : history.data.values()) {
+		for (HistoryEvent event : history.getValues()) {
 			writer.println("@HistoryEvent" + DELIMITER +
 					event.getID() + DELIMITER +
 					event.getLocation().getID() + DELIMITER +
@@ -75,7 +75,7 @@ public class MemoryToFileWriter {
 	private void writeLocation(LocationDAO locations, Set<String> alreadyWritten, Location loc, PrintStream writer) {
 		String parent = (loc.getParent() == null? "null" : loc.getParent().getID());
 		if (loc.getParent() != null && !alreadyWritten.contains(parent)) {
-			writeLocation(locations, alreadyWritten, locations.getLocation(loc.getParent().getID()), writer);
+			writeLocation(locations, alreadyWritten, locations.fetch(loc.getParent().getID()), writer);
 		}
 		
 		if (!alreadyWritten.contains(loc.getID())) {
@@ -94,37 +94,37 @@ public class MemoryToFileWriter {
 			if (line.startsWith("@Entity")) {
 				String[] bits = line.split(DELIMITER);
 				Entity e = new EntityImpl(bits[1]);
-				factory.getEntityDAO().createOrUpdateEntity(e);
+				factory.getEntityDAO().createOrUpdate(e);
 			}
 			
 			else if (line.startsWith("@Location" + DELIMITER)) {
 				String[] bits = line.split(DELIMITER);
 				Location parent = null;
-				if (factory.getLocationDAO().locationExists(bits[3])) {
-					parent = factory.getLocationDAO().getLocation(bits[3]);
+				if (factory.getLocationDAO().exists(bits[3])) {
+					parent = factory.getLocationDAO().fetch(bits[3]);
 				}
-				factory.getLocationDAO().createOrUpdateLocation(new LocationImpl(bits[2], parent));
+				factory.getLocationDAO().createOrUpdate(new LocationImpl(bits[2], parent));
 				
 			} else if (line.startsWith("@HistoryEvent")) {
 				String[] bits = line.split(DELIMITER);
-				Location location = factory.getLocationDAO().getLocation(bits[2]);
+				Location location = factory.getLocationDAO().fetch(bits[2]);
 				long timeStart = Long.valueOf(bits[4]);
 				long endTime = Long.valueOf(bits[5]);
 				HistoryEventImpl event = new HistoryEventImpl(bits[1], location, new TimeSpan(new TimeImpl(timeStart), new TimeImpl(endTime)));
 				event.setDescription(bits[3]);
-				factory.getHistoryDAO().createOrUpdateHistoryEvent(event);
+				factory.getHistoryDAO().createOrUpdate(event);
 				
 			} else if (line.startsWith("@LocationRelationship")) {
 				String[] bits = line.split(DELIMITER);
 				// these should exist already
-				Entity entity = factory.getEntityDAO().getEntity(bits[2]);
-				Location location = factory.getLocationDAO().getLocation(bits[3]);
+				Entity entity = factory.getEntityDAO().fetch(bits[2]);
+				Location location = factory.getLocationDAO().fetch(bits[3]);
 				long timeStart = Long.valueOf(bits[4]);
 				long endTime = Long.valueOf(bits[5]);
 				TimeSpan timespan = new TimeSpan(new TimeImpl(timeStart), new TimeImpl(endTime));
 				
 				LocationRelationShip ship = new LocationRelationShip(timespan, entity, location);
-				factory.getLocationDAO().createOrUpdateLocationRelationShip(ship);
+				factory.getRelationShipDAO().createOrUpdate(ship);
 			}
 		}
 		br.close();
