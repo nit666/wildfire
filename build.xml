@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<project name="Universe" default="all" basedir=".">
+
+	<property name="tomcat.dir" value="C:/tools/Tomcat6.0/webapps" />
+	<property name="tomcat.webapp" value="history" />
+	<property name="deploy.dir" value="deploy" />
+
+    <target name="all">
+		<!-- fill in the details of the tomcat package here -->
+		<mkdir dir="${deploy.dir}/tomcat" />
+		<copy todir="${deploy.dir}/tomcat" overwrite="true" >
+			<fileset dir="web" />
+  		</copy>
+
+		<copy todir="${deploy.dir}/tomcat/WEB-INF/classes" overwrite="true" >
+			<fileset dir="History/bin" />
+		</copy>
+
+		<jar destfile="${deploy.dir}/${tomcat.webapp}.war">
+			<fileset dir="${deploy.dir}/tomcat" />
+		</jar>
+		
+		<delete dir="${tomcat.dir}/${tomcat.webapp}" />
+		
+		<copy file="${deploy.dir}/${tomcat.webapp}.war" todir="${tomcat.dir}" overwrite="true" />
+		
+	</target>
+
+</project>

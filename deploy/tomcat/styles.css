@@ -1,0 +1,109 @@
+/*   	
+    text - #1A202C
+    headings, links - #1F7872
+    minor text #72B095
+    background - #DEDBA7
+    stand out text - #D13F31
+ */
+
+body {
+	background-color: #ffffff;
+	color: #1A202C;
+	font-size: 13px;
+	font-family: verdana, serif;
+}
+
+h2 {
+	font-size: 14px;
+	color: #1F7872;
+}
+
+a {
+	text-decoration: none;
+	color: #1F7872;
+}
+
+
+ul {
+	display: block;
+}
+
+li {
+	list-style-type:none;
+	padding-bottom: 5px;
+}
+
+input {
+	
+}
+
+#title {
+	background-image: url('images/title.jpg');
+	width: 317px;
+	height: 73px;
+	margin: auto;
+}
+
+#catch-phrase {
+	font-style: italic;
+	font-weight: bold;
+	color: #72B095;
+	text-align: center;
+}
+
+#search-location,#search-entities {
+	width: 90%;
+}
+
+#search-from, #search-to {
+	width: 30%;
+}
+
+#links {
+	text-align: center;
+	margin-top: 10px;
+}
+
+#results {
+	margin-right: 22%;
+	margin-left: 22%;
+	/* border-left: 3px solid #72B095;
+	border-right: 3px solid #72B095; */
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+#search-pattern {
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+#search-pattern  td {
+	margin: 0px;
+	padding: 3px;
+	border: 1px solid black;
+}
+
+#footer {
+	margin-top: 15px;
+	text-align: center;
+	color: #72B095;
+	font-size: 11px;
+}
+
+#footer a {
+	color: #72B095;
+}
+
+.year {
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.month {
+	font-style: italic;
+}
+
+.expand {
+	font-style: italic
+}

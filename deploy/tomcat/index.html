@@ -1,0 +1,78 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<title>Time, as it happened</title>
+	<link href="styles.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div id="title"></div>
+	<div id="catch-phrase">A record of people, places and times, as it happened throughout history.</div>
+	<div id="links">
+		<a href="create-new.html">Create New...</a>
+	</div>
+	<div id="results">
+	    <form name="search" action="search.jsp">
+		<div id="search-pattern">
+			<table align="center" cellspacing="0" cellpadding="0"> 
+				<tr>
+					<td>Location</td>
+					<td><input type="text" name="search-location" id="search-location" value="Australia -> Adelaide -> Rosewater" /></td>
+					<td><a href="create-location.html"><img src="images/map-icon.png" width="25" height="25" /></a></td>
+				</tr>
+				<tr>
+					<td>Time Period</td>
+					<td>From <input type="text" name="search-from" id="search-from" value="2012" /> to <input type="text" name="search-to" id="search-to" value="2000" /></td>
+					<td><a href="create-event.html"><img src="images/calendar-icon.png" width="25" height="25" /></a></td>
+				</tr>
+				<tr>
+					<td>People/Names</td>
+					<td><input type="text" name="search-entities" id="search-entities" value ="Neil Hoskins" /></td>
+					<td><a href="create-entity.html"><img src="images/people-icon.png" width="25" height="25" /></a></td>
+				</tr>
+			</table>
+			<input type="submit" value="Search"></input>
+		</div>
+	    </form>
+		
+		<hr />
+		
+		<div class="profile">
+			<h2>Rosewater</h2>
+			<p><a href="#">Rosewater</a> is a suburb of Adelaide, founded in 1890 by blah blah blah <a class="expand" href="#">... more</a></p> 
+		</div> 
+		
+		<div class="profile">
+			<h2>Neil Hoskins</h2>
+			<p><a href="#">Neil Hoskins</a> was born in New Zealand on 15th Janurary 1974 in Dargaville. Now working as a <a class="expand" href="#">... more</a></p> 
+		</div> 
+		
+		<hr />
+		
+		<div id="search-results">
+			<ul>
+				<li><a class="year" href="#">2012</a>	
+					<ul>
+						<li><span class="month date">September 1st</span> - <a href="#">Neil Hoskins</a> Starts a garden.</li>
+						<li><span class="month date">June 23rd</span> - <a href="#">Neil Hoskins</a> Moved into 13 lincoln street.</li>
+					</ul>
+				</li>
+				<li><a class="year" href="#">2003</a>
+					<ul>
+						<li><span class="month date">June 12th</span> - Something significant happened, who knows what?</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		
+		<hr />
+	</div>
+	
+	<div id="footer">
+		<a href="#">Privacy Policy</a> | <a href="#">Terms &amp; Conditions</a> | &copy Copyright vandalay industries 2012
+	</div>
+</body>
+</html>
+
+
+

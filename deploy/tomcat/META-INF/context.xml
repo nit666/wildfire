@@ -1,0 +1,9 @@
+<Context>	
+	  <Resource name="jdbc/history" auth="Container"
+            type="javax.sql.DataSource" username="wally" password="wally"
+            driverClassName="net.sourceforge.jtds.jdbc.Driver" 
+            url="net.sourceforge.jtds.jdbc.Driver://localhost:1433;DatabaseName=history;SelectMethod=cursor;"
+            maxActive="8" 
+            />
+
+</Context>

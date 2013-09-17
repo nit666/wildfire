@@ -1,0 +1,118 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<title>Time, as it happened</title>
+	<link href="styles.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div id="title"></div>
+	<div id="catch-phrase">A record of people, places and times, as it happened throughout history.</div>
+	<div id="results">
+	    <form name="create-entity" method="post" action="CreateItem">
+		<input type="hidden" name="type" value="entity" />
+		<div class="New-item">
+			<h3>Create New Person</h3>
+			<table align="center" cellspacing="0" cellpadding="0"> 
+				<tr>
+					<td>Person Name</td>
+					<td><input type="text" name="entity-name" id="entity-name" value="" /></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type="submit" value="Create New Person" /></td>
+				</tr>
+			</table>
+		</div>
+	    </form>
+		
+		<form name="create-location" method="post" action="CreateItem">
+		<input type="hidden" name="type" value="location" />
+		<div class="New-item">
+			<h3>Create New Location</h3>
+			<table align="center" cellspacing="0" cellpadding="0"> 
+				<tr>
+					<td>Location Name</td>
+					<td><input type="text" name="location-name" id="location-name" value="" /></td>
+				</tr>
+				<tr>
+					<td>Location Parent</td>
+					<td><input type="text" name="location-parent" id="location-parent" value="" /></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type="submit" value="Create New Location" /></td>
+				</tr>
+			</table>
+		</div>
+	    </form>
+
+	    <form name="create-event" method="post" action="CreateItem">
+		<input type="hidden" name="type" value="event" />
+		<div class="New-item">
+			<h3>Create New Event</h3>
+			<table align="center" cellspacing="0" cellpadding="0"> 
+				<tr>
+					<td>Event Name</td>
+					<td><input type="text" name="event-name" id="event-name" value="" /></td>
+				</tr>
+				<tr>
+					<td>Event Description</td>
+					<td><textarea rows="4" cols="50" name="event-description" id="event-description" value=""></textarea></td>
+				</tr>
+				<tr>
+					<td>Event Location</td>
+					<td><input type="text" name="event-location" id="event-location" value="" /></td>
+				</tr>
+				<tr>
+					<td>Start Time</td>
+					<td><input type="date" name="event-start" id="event-start" value="" /> (dd-MM-yyyy)</td>
+				</tr>
+				<tr>
+					<td>End Time</td>
+					<td><input type="date" name="event-end" id="event-end" value="" /> (dd-MM-yyyy)</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type="submit" value="Create New Event" /></td>
+				</tr>
+			</table>
+		</div>
+	    </form>
+		
+		<form name="create-entity-location-relationship" method="post" action="CreateItem">
+		<input type="hidden" name="type" value="relationship" />
+		<div class="New-item">
+			<h3>Person at a location</h3>
+			<table align="center" cellspacing="0" cellpadding="0"> 
+				<tr>
+					<td>Person Name</td>
+					<td><input type="text" name="entity-name" id="entity-name" value="" /></td>
+				</tr>
+				<tr>
+					<td>Location</td>
+					<td><input type="text" name="location-name" id="location-name" value="" /></td>
+				</tr>
+				<tr>
+					<td>Start Time</td>
+					<td><input type="date" name="relationship-start" id="relationship-start" value="" /> (dd-MM-yyyy)</td>
+				</tr>
+				<tr>
+					<td>End Time</td>
+					<td><input type="date" name="relationship-end" id="relationship-end" value="" /> (dd-MM-yyyy)</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type="submit" value="Create New Relationship" /></td>
+				</tr>
+			</table>
+		</div>
+	    </form>
+	</div>
+
+	
+	<div id="footer">
+		<a href="#">Privacy Policy</a> | <a href="#">Terms &amp; Conditions</a> | &copy Copyright vandalay industries 2012
+	</div>
+</body>
+</html>
