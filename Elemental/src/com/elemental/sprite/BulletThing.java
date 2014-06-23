@@ -15,28 +15,30 @@ import com.example.elemental.R;
 public class BulletThing extends GameThing {
 
 	boolean hasBeenOnScreen = false;
-	Point target;
+	float targetX;
+	float targetY;
 	Behaviour behaviour;
 	
 	@Override
 	public float getVelocity() {
-		return 5;
+		return 80;
 	}
 	
-	public BulletThing(GameContext context, int x, int y, Point target) {
+	public BulletThing(GameContext context, float x, float y, float targetX, float targetY) {
 		super(x, y, new Rect(0, 0, context.getScreenWidth(), context.getScreenHeight()));
 		getSpeed().setXv(3);
 		getSpeed().setYv(3);		
 		Bitmap bitmap = BitmapFactory.decodeResource(context.getContext()
 				.getResources(), R.drawable.bullet);
 		setSprite(new SimpleSprite(bitmap, x, y));
-		this.target = target;
+		this.targetX = targetX;
+		this.targetY = targetY;
 	}
 
 	@Override
 	public void update(GameContext context) {
 		if (behaviour == null) {
-			behaviour = new MovingToBehaviour(this, context, target);
+			behaviour = new MovingToBehaviour(this, context, targetX, targetY);
 			((MovingToBehaviour) behaviour).setContinueAfterTarget(true);
 		}
 		

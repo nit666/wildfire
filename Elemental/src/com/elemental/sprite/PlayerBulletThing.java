@@ -1,13 +1,11 @@
 package com.elemental.sprite;
 
-import android.graphics.Point;
-
 import com.elemental.GameContext;
 
 public class PlayerBulletThing extends BulletThing {
 
-	public PlayerBulletThing(GameContext context, int x, int y, Point target) {
-		super(context, x, y, target);
+	public PlayerBulletThing(GameContext context, float x, float y, float targetX, float targetY) {
+		super(context, x, y, targetX, targetY);
 	}
 
 	@Override

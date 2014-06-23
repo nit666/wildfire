@@ -3,9 +3,8 @@ package com.elemental.sprite;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Point;
 import android.graphics.Rect;
- 
+
 import com.elemental.GameContext;
 import com.elemental.sprite.spritestate.Behaviour;
 import com.elemental.sprite.spritestate.IdleBehaviour;
@@ -17,7 +16,7 @@ public class Alien1 extends GameThing {
 
 	Behaviour currentBehaviour;
 	
-	public Alien1(GameContext context, int x, int y, Rect bounds) {
+	public Alien1(GameContext context, float x, float y, Rect bounds) {
 		super(x, y, bounds);
 		Bitmap bitmap = BitmapFactory.decodeResource(context.getContext()
 				.getResources(), R.drawable.alien1);
@@ -29,14 +28,15 @@ public class Alien1 extends GameThing {
 
 		if (currentBehaviour == null || currentBehaviour instanceof IdleBehaviour) {
 			// move around randomly and fire at the player
+			// use ints for exact pixels
 			int x = (int) (Math.random() * 1000 % bounds.width());
 			int y = (int) (Math.random() * 1000 % bounds.height());
 			
-			currentBehaviour = new MovingToBehaviour(this, context, new Point(x, y));
+			currentBehaviour = new MovingToBehaviour(this, context, x, y);
 		}
 
 		// fire every 1 - 3 seconds
-		if (TimeTester.test(this.hashCode() + "alien", 1000 + (int)(Math.random() * 10000 % 2000))) {
+		if (TimeTester.test(this.hashCode() + "alien", (int)(1000.0 + (Math.random() * 10000 % 2000)))) {
 			// don't fire for now
 			
 			//BulletThing bullet = new BulletThing(context, this.getX(), this.getY(), new Point(context.getPlayer().getX(), context.getPlayer().getY()));

@@ -12,7 +12,7 @@ public class FireBehaviour implements Behaviour {
 	Behaviour previousBehaviour;
 	
 	public FireBehaviour(GameContext context, GameThing target, int startx, int starty) {
-		BulletThing bullet = new BulletThing(context, startx, starty, new Point(target.getX(), target.getY()));
+		BulletThing bullet = new BulletThing(context, startx, starty, target.getX(), target.getY());
 		context.spawn(bullet);
 	}
 	

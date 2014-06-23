@@ -5,22 +5,24 @@ import android.graphics.Point;
 
 import com.elemental.GameContext;
 import com.elemental.sprite.GameThing;
+import com.elemental.util.RecordedTouch;
 
 public class MovingToBehaviour implements Behaviour {
 
 	GameThing thing;
-	Point moveToLocation;
+	float moveToX;
+	float moveToY;
 	boolean continueAfterTarget = false;
 	
 	public MovingToBehaviour(GameThing thing, GameContext context) {
-		this(thing, context, 
-				new Point((int) context.getLatestTouch().getFinishX(), (int) context.getLatestTouch().getFinishY()));
+		this(thing, context, context.getLatestTouch().getFinishX(), context.getLatestTouch().getFinishY());
 	}
 
-	public MovingToBehaviour(GameThing thing, GameContext context, Point moveToLocation) {
+	public MovingToBehaviour(GameThing thing, GameContext context, float moveX, float moveY) {
 		this.thing = thing;
-		this.moveToLocation = moveToLocation;
-		thing.changeDirection(moveToLocation.x, moveToLocation.y, thing.getX(), thing.getY());
+		this.moveToX = moveX;
+		this.moveToY = moveY;
+		thing.changeDirection(moveToX, moveToY, thing.getX(), thing.getY());
 	}
 	
 	public boolean isContinueAfterTarget() {
@@ -35,20 +37,20 @@ public class MovingToBehaviour implements Behaviour {
 	public Behaviour update(GameContext context) {	
 		
 		// the next move will get us there
-		if (Math.abs(thing.getX() - moveToLocation.x) < thing.getSpeed().getXv()) {
-			thing.setX(moveToLocation.x);
+		if (Math.abs(thing.getX() - moveToX) < thing.getSpeed().getXv() / context.getTimeSinceLastUpdate()) {
+			thing.setX(moveToX);
 		}
-		if (Math.abs(thing.getY() - moveToLocation.y) < thing.getSpeed().getYv()) {
-			thing.setY(moveToLocation.y);
+		if (Math.abs(thing.getY() - moveToY) < thing.getSpeed().getYv() / context.getTimeSinceLastUpdate()) {
+			thing.setY(moveToY);
 		};
 		
 		if (!isContinueAfterTarget()) {
-			thing.changeDirection(moveToLocation.x, moveToLocation.y, thing.getX(), thing.getY());
+			thing.changeDirection(moveToX, moveToY, thing.getX(), thing.getY());
 		}
 		thing.updatePositionBasedOnSpeed(context);
 		
 		if (!isContinueAfterTarget()) {
-			if (thing.getX() == moveToLocation.x) { // && thing.getY() == moveToLocation.y){
+			if ((int) thing.getX() == (int) moveToX) { // && thing.getY() == moveToLocation.y){
 				return new IdleBehaviour(thing);
 			}
 		}

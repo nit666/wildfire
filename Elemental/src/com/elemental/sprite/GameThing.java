@@ -14,18 +14,18 @@ public class GameThing implements Drawable {
 	};
 
 	private Sprite sprite; // the actual bitmap
-	private int x; // the X coordinate
-	private int y; // the Y coordinate
+	private float x; // the X coordinate
+	private float y; // the Y coordinate
 	private boolean touched; // if droid is touched/picked up
 	private Speed speed = new Speed();
 	CurrentState state = CurrentState.OK;
 	Rect bounds;
 
-	public GameThing(int x, int y, Rect bounds) {
+	public GameThing(float x, float y, Rect bounds) {
 		this.x = x;
 		this.y = y;
-		speed.setXv(5);
-		speed.setYv(5);
+		speed.setXv(10);
+		speed.setYv(10);
 		this.bounds = bounds;
 	}
 
@@ -37,11 +37,11 @@ public class GameThing implements Drawable {
 		this.sprite = sprite;
 	}
 
-	public int getX() {
+	public float getX() {
 		return x;
 	}
 
-	public void setX(int x) {
+	public void setX(float x) {
 		this.x = x;
 		getSprite().setX(x);
 	}
@@ -54,11 +54,11 @@ public class GameThing implements Drawable {
 		this.bounds = bounds;
 	}
 
-	public int getY() {
+	public float getY() {
 		return y;
 	}
 
-	public void setY(int y) {
+	public void setY(float y) {
 		this.y = y;
 		getSprite().setY(y);
 	}
@@ -101,12 +101,14 @@ public class GameThing implements Drawable {
 	}
 
 	public void updatePositionBasedOnSpeed(GameContext context) {
-		setX((int) (getX() + getSpeed().getXv() * getSpeed().getxDirection()));
-		setY((int) (getY() + getSpeed().getYv() * getSpeed().getyDirection()));
+		long timeFactor = context.getTimeSinceLastUpdate();
+		// speed is pixels per second, so we divide by the timeFactor
+		setX((getX() + (getSpeed().getXv() / timeFactor) * getSpeed().getxDirection()));
+		setY((getY() + (getSpeed().getYv() / timeFactor) * getSpeed().getyDirection()));
 	}
 
 	public float getVelocity() {
-		return 7;
+		return 100;
 	}
 
 	public void handleCollision(GameContext context, GameThing t) {
@@ -117,14 +119,14 @@ public class GameThing implements Drawable {
 		return 0;
 	}
 
-	public synchronized void changeDirection(int newX, int newY, int oldX,
-			int oldY) {
+	public synchronized void changeDirection(float newX, float newY, float oldX,
+			float oldY) {
 		// we want to move the object in the direction of the stroke at the
 		// velocity
 		// we know the X and Y directions but not the speed as yet
-		double xv = newX - oldX;
-		double yv = newY - oldY;
-		double velocity = getVelocity();
+		float xv = newX - oldX;
+		float yv = newY - oldY;
+		float velocity = getVelocity();
 
 		getSpeed().setxDirection((xv < 0) ? -1 : 1);
 		getSpeed().setyDirection((yv < 0) ? -1 : 1);
@@ -140,15 +142,15 @@ public class GameThing implements Drawable {
 			// find one of the angles and then use that to determine the x
 			// and y speeds
 			double angle = Math.atan(yv / xv);
-			xv = (Math.cos(angle) * velocity);
-			yv = (Math.sin(angle) * velocity);
+			xv = (float) (Math.cos(angle) * velocity);
+			yv = (float) (Math.sin(angle) * velocity);
 		}
 
-		getSpeed().setXv((int) xv);
-		getSpeed().setYv((int) yv);
+		getSpeed().setXv(xv);
+		getSpeed().setYv(yv);
 	}
 
-	public boolean pointIsWithin(int eventX, int eventY) {
+	public boolean pointIsWithin(float eventX, float eventY) {
 		if (eventX >= (getX() - getSprite().getSpriteWidth() / 2)
 				&& (eventX <= (getX() + getSprite().getSpriteWidth() / 2))) {
 			if (eventY >= (getY() - getSprite().getSpriteHeight() / 2)
@@ -159,7 +161,7 @@ public class GameThing implements Drawable {
 		return false;
 	}
 	
-	public boolean pointIsWithinBounds(int x, int y) {
+	public boolean pointIsWithinBounds(float x, float y) {
 		if (x >= bounds.left && x <= bounds.right) {
 			if (y >= bounds.top	&& y <= bounds.bottom) {
 				return true;
@@ -210,14 +212,14 @@ public class GameThing implements Drawable {
 	}
 
 	// for two rectangles colliding
-	protected boolean collidesWith(int x1, int x2, int y1, int y2, int w1,
-			int w2, int h1, int h2) {
+	protected boolean collidesWith(float x1, float x2, float y1, float y2, float w1,
+			float w2, float h1, float h2) {
 		return ((x2 >= x1 && x2 < x1 + w1) || (x1 >= x2 && x1 < x2 + w2))
 				&& ((y2 >= y1 && y2 < y1 + h1) || (y1 >= y2 && y1 < y2 + h2));
 	}
 
 	// is a circle so test like a circle
-	protected boolean collidesWith(int x1, int x2, int y1, int y2, int r1,
+	protected boolean collidesWith(float x1, float x2, float y1, float y2, float r1,
 			int r2) {
 		return (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) < (r1 / 2 + r2 / 2)
 				* (r1 / 2 + r2 / 2);

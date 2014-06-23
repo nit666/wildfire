@@ -87,7 +87,8 @@ public class MainGamePanel extends SurfaceView implements
 		onDraw(canvas);
 	}
 
-	public void update() {
+	public void update(long timeSinceLastUpdate) {
+		gameContext.setTimeSinceLastUpdate(timeSinceLastUpdate);
 		gameState = gameState.update(gameContext);
 	}
 	

@@ -22,6 +22,14 @@ public class GameContext {
 	PlayerCharacter player;
 	RecordedTouch latestTouch;
 	World currentWorld; // default world
+	long timeSinceLastUpdate;
+
+	public long getTimeSinceLastUpdate() {
+		return timeSinceLastUpdate;
+	}
+	public void setTimeSinceLastUpdate(long timeSinceLastUpdate) {
+		this.timeSinceLastUpdate = timeSinceLastUpdate;
+	}
 
 	List<GameThing> spawnList = new LinkedList<GameThing>();
 	

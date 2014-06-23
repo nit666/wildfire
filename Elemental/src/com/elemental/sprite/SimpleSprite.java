@@ -6,10 +6,10 @@ import android.graphics.Canvas;
 public class SimpleSprite implements Sprite {
 
 	Bitmap bitmap;
-	int x;
-	int y;
+	float x;
+	float y;
 	
-	public SimpleSprite(Bitmap bitmap, int x, int y) {
+	public SimpleSprite(Bitmap bitmap, float x, float y) {
 		this.bitmap = bitmap;
 		this.x = x;
 		this.y = y;
@@ -35,12 +35,12 @@ public class SimpleSprite implements Sprite {
 	}
 
 	@Override
-	public void setX(int x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 
 	@Override
-	public void setY(int y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 }

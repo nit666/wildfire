@@ -18,10 +18,10 @@ public class AnimatedSprite implements Sprite {
 	private int spriteWidth;	// the width of the sprite to calculate the cut out rectangle
 	private int spriteHeight;	// the height of the sprite
 
-	private int x;				// the X coordinate of the object (top left of the image)
-	private int y;				// the Y coordinate of the object (top left of the image)
+	private float x;				// the X coordinate of the object (top left of the image)
+	private float y;				// the Y coordinate of the object (top left of the image)
 
-	public AnimatedSprite(Bitmap bitmap, int x, int y, int width, int height, int fps, int frameCount) {
+	public AnimatedSprite(Bitmap bitmap, float x, float y, int width, int height, int fps, int frameCount) {
 		this.bitmap = bitmap;
 		this.x = x;
 		this.y = y;
@@ -52,7 +52,7 @@ public class AnimatedSprite implements Sprite {
 		// where to draw the sprite
 		x = getX() - (getSpriteWidth() / 2);
 		y = getY() - (getSpriteHeight() / 2);
-		Rect destRect = new Rect(x, y, x + spriteWidth, y + spriteHeight);
+		Rect destRect = new Rect((int)x, (int)y, (int)x + spriteWidth, (int)y + spriteHeight);
 		canvas.drawBitmap(bitmap, sourceRect, destRect, null);
 	}
 
@@ -80,19 +80,19 @@ public class AnimatedSprite implements Sprite {
 		this.spriteHeight = spriteHeight;
 	}
 
-	public int getX() {
+	public float getX() {
 		return x;
 	}
 
-	public void setX(int x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 
-	public int getY() {
+	public float getY() {
 		return y;
 	}
 
-	public void setY(int y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 }

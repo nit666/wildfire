@@ -20,7 +20,7 @@ public class PlayerCharacter extends GameThing {
 
 	Behaviour currentBehaviour;
 	
-	public PlayerCharacter(GameContext context, int x, int y, Rect bounds) {
+	public PlayerCharacter(GameContext context, float x, float y, Rect bounds) {
 		super(x, y, bounds);
 		currentBehaviour = new IdleBehaviour(this);
 		setSprite(new PlayerSprite(context, x, y));
@@ -64,11 +64,11 @@ public class PlayerCharacter extends GameThing {
 	
 	private void touch(GameContext context) {
 		RecordedTouch touch = context.getLatestTouch();
-		if (pointIsWithinBounds((int) touch.getFinishX(), (int) touch.getFinishY())) {
+		if (pointIsWithinBounds(touch.getFinishX(), touch.getFinishY())) {
 			currentBehaviour = currentBehaviour.switchBehaviour(new MovingToBehaviour(this, context));
 		} else {
 			// fire at point
-			BulletThing bullet = new PlayerBulletThing(context, getX(), getY(), new Point((int) touch.getFinishX(), (int) touch.getFinishY()));
+			BulletThing bullet = new PlayerBulletThing(context, getX(), getY(), touch.getFinishX(), touch.getFinishY());
 			context.spawn(bullet);
 		}
 	}

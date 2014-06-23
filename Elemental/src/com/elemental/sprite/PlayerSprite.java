@@ -9,7 +9,7 @@ import com.example.elemental.R;
 
 public class PlayerSprite extends SimpleSprite {
 	
-	public PlayerSprite(GameContext context, int x, int y) {
+	public PlayerSprite(GameContext context, float x, float y) {
 		super(
 				Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
 						context.getContext().getResources(), R.drawable.character2), 70, 90, true)
